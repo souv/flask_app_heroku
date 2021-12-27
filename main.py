@@ -7,7 +7,7 @@ df = df.head(5)
 
 colnames = ['datetime','coin_name','coin_price']
 
-@app.route('/login',methods=['POST','GET'])
+@app.route('/',methods=['POST','GET'])
 def main():
 	return render_template('result.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
 
