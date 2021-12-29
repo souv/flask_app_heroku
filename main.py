@@ -13,17 +13,18 @@ colnames_diff = ['coin_name','coin_diff','coin_diff_pct']
 
 @app.route('/',methods=['POST','GET'])
 def main():
-    custid_t = request.values.to_dict()
+    # get the request values user type 
+	custid_t = request.values.to_dict()
+    # get the request values we want
+	cust_id_dict = {k: v for k, v in custid_t.items() if k.startswith('prodid')}
+	key_list = []
     
-    cust_id_dict = {k: v for k, v in custid_t.items() if k.startswith('prodid')}	
-    
-    key_list = []
-    for key in cust_id_dict.values():
-        key_list.append(key)	
-	
-    filter_df = df[df['coin_name'].isin(key_list)] 
-    filter_df2 = filter_df.sort_values(by=['coin_name','datetime'])
-    return render_template('login.html',  tables=[filter_df2.to_html(classes='data')], titles=filter_df2.columns.values,coin_list=sorted(list(df['coin_name'].unique())))
+	for key in cust_id_dict.values():
+		key_list.append(key)	
+	#filter data by request values we want
+	filter_df = df[df['coin_name'].isin(key_list)]
+	filter_df2 = filter_df.sort_values(by=['coin_name','datetime'])
+	return render_template('login.html',  tables=[filter_df2.to_html(classes='data')], titles=filter_df2.columns.values,coin_list=sorted(list(df['coin_name'].unique())))
 
 @app.route('/diff',methods=['POST','GET'])
 def diff():
